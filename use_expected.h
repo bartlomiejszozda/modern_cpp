@@ -1,7 +1,7 @@
 #pragma once
 #include <expected>
 
-namespace expected {
+namespace use_expected {
     [[nodiscard]] std::expected<int, std::string> someCalculations(int a) {
         if (a > 0) {
             return 5;
@@ -19,4 +19,4 @@ namespace expected {
             std::cout << "error is: " << exp.error() << std::endl;
         }
     }
-}// namespace expected
+}// namespace use_expected

@@ -6,7 +6,7 @@
 
 #include "format_specializations.h"
 
-namespace span {
+namespace use_span {
     void sortWithSpan(std::span<int> int_collection) {
         std::sort(int_collection.begin(), int_collection.end());
     }
@@ -19,4 +19,4 @@ namespace span {
         sortWithSpan(ints);
         print("ints after: {}", ints);
     }
-}// namespace span
+}// namespace use_span

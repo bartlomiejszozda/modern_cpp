@@ -3,7 +3,7 @@
 #include <iostream>
 #include <memory>
 
-namespace shared {
+namespace use_shared {
     class B;// Forward declaration
 
     class A {
@@ -37,4 +37,4 @@ namespace shared {
         b->ptrA = std::shared_ptr<A>(a);// B's shared_ptr to A
     }
 
-}// namespace shared
+}// namespace use_shared
