@@ -1,0 +1,4 @@
+docker exec -it modern_cpp_container bash
+docker stop modern_cpp_container
+docker start modern_cpp_container
+docker rm modern_cpp_container
