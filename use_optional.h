@@ -6,7 +6,7 @@
 namespace use_optional {
     auto returnOptional() -> std::optional<int> {
         std::default_random_engine eng(std::random_device{}());
-        std::uniform_int_distribution<int> int_distribution(0, 10);
+        std::uniform_int_distribution<int> int_distribution(0, 100);
         auto drawn = int_distribution(eng);
         if (drawn % 2) {
             return drawn;
@@ -14,12 +14,12 @@ namespace use_optional {
         return std::nullopt;
     }
 
-    void useOptional() {
+    void drawEvenNumber() {
         auto opt = use_optional::returnOptional();
         if (opt.has_value()) {
-            std::cout << std::format("{0} is optional", opt.value());
+            std::cout << std::format("{0} is optional", opt.value()) << std::endl;
         } else {
-            std::cout << std::format("is not optional");
+            std::cout << std::format("is not optional") << std::endl;
         }
     }
 

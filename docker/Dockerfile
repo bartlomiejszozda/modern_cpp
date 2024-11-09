@@ -16,6 +16,7 @@ RUN apt update -y && apt upgrade -y && apt install -y \
     rsync \
     openssh-server \
     gdb && \
+    valgrind && \
     apt clean
 
 #ssh for remote development
@@ -36,5 +37,6 @@ RUN wget https://github.com/ccache/ccache/releases/download/v$VERSION/$CCACHE_TA
     mkdir build && \
     cd build && cmake .. -DCMAKE_BULD_TYPE=Release && \
     make install -j`nproc` && \
+    cd ../../ && \
     rm -r $CCACHE_SRC
 
