@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <string>
 
@@ -7,13 +8,4 @@ namespace use_string_view {
         std::cout << str << "\n";
     }
 
-    void printChar() {
-        const char *str = "const char ptr bla";
-        printStringView(str);
-    }
-
-    void printString() {
-        std::string str{"string bla"};
-        printStringView(str);
-    }
 }// namespace use_string_view

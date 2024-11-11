@@ -17,6 +17,10 @@ RUN apt update -y && apt upgrade -y && apt install -y \
     openssh-server \
     gdb && \
     valgrind && \
+    apt clean \
+
+RUN apt install -y \
+    libgtest-dev && \
     apt clean
 
 #ssh for remote development

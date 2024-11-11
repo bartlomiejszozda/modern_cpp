@@ -9,7 +9,7 @@
 /*
 Task 3.5: Learn how to create own ranges pipe object and create filterEven and square functions in such way that they can be used in ranges pipe
 
- Need to use ranges-v3:
+Need to use ranges-v3:
         Task 8: Chaining Views with views::cycle
         Goal: Repeat a short range cyclically to create a range of repeating values.
         Details: Use views::cycle to repeat a range (e.g., {1, 2, 3}) multiple times. Limit the length with views::take.
@@ -34,8 +34,6 @@ Task 3.5: Learn how to create own ranges pipe object and create filterEven and s
         Goal: Implement a sliding window view that groups elements into small, overlapping subranges.
         Details: Write a custom view or use std::views::sliding (if available) to create sliding subranges over the data.
         Example: For {1, 2, 3, 4, 5} with a window size of 3, the output should be { {1, 2, 3}, {2, 3, 4}, {3, 4, 5} }.
-
-Task 13: Create learning tests instead of just functions
 */
 
 namespace use_ranges {
@@ -69,47 +67,47 @@ namespace use_ranges {
         return "dupa";
     }
 
-    void toVectorAndPrint(auto range) {
+    std::vector<int> toVector(auto range) {
         std::vector<int> result;
-        std::cout << "typename of range: " << typeid(range).name() << "\n";
         std::ranges::copy(range, std::back_inserter(result));
-        print("{}", result);
+        return result;
     }
 
-    void filterEven(std::span<int> numbers) {
+    std::vector<int> filterEven(std::span<int> numbers) {
         auto even_numbers = numbers | std::views::filter([](const int num) { return num % 2 == 0; });
-        toVectorAndPrint(even_numbers);
+        return toVector(even_numbers);
     }
 
-    void square(std::span<int> numbers) {
+    std::vector<int> square(std::span<int> numbers) {
         auto squared = numbers | std::views::transform([](const int num) { return num * num; });
-        toVectorAndPrint(squared);
+        return toVector(squared);
     }
 
-    void reverse(std::span<int> numbers) {
+    std::vector<int> reverse(std::span<int> numbers) {
         auto squaredOddFirst2 =
                 numbers | std::views::reverse;
-        toVectorAndPrint(squaredOddFirst2);
+        return toVector(squaredOddFirst2);
     }
 
-    void drop2(std::span<int> numbers) {
+    std::vector<int> drop2(std::span<int> numbers) {
         auto squaredOddFirst2 = numbers | std::views::drop(2);
-        toVectorAndPrint(squaredOddFirst2);
+        return toVector(squaredOddFirst2);
     }
 
-    void squareOddTake2(std::span<int> numbers) {
+    std::vector<int> squareOddTake2(std::span<int> numbers) {
         auto squaredOddFirst2 = numbers | std::views::filter([](const int num) { return num % 2 == 1; }) |
                                 std::views::transform([](const int num) { return num * num; }) | std::views::take(2);
-        toVectorAndPrint(squaredOddFirst2);
+        return toVector(squaredOddFirst2);
     }
 
-    void flatNested(std::vector<std::vector<int>> numbers) {
+    std::vector<int> flatNested(std::vector<std::vector<int>> numbers) {
         auto flated = numbers | std::views::join;
-        toVectorAndPrint(flated);
+        return toVector(flated);
     }
 
-    void generateFromIota() {
+    std::vector<int> generateFromIota() {
         auto generated = std::views::iota(100) | std::views::take(10);
+        return toVector(generated);
     }
 
 }// namespace use_ranges

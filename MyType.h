@@ -1,4 +1,5 @@
 #pragma once
+
 #include "format_specializations.h"
 
 class MyType {
@@ -15,10 +16,3 @@ struct std::formatter<MyType> {
         return std::format_to(ctx.out(), "my type from formatter");
     }
 };
-
-namespace use_formatter {
-    void printOwnTypeUsingFormatter() {
-        MyType mytype;
-        print("mytype printed with the formatter: {}", mytype);
-    }
-}// namespace use_formatter
