@@ -7,19 +7,21 @@
 #include "format_specializations.h"
 
 namespace use_span {
-    void sortFirst4WithSpan(std::span<int> int_collection) {
-        auto num_el = 4;
-        if (int_collection.size() >= num_el) {
-            auto first4 = int_collection.subspan(0, num_el);
-            std::sort(first4.begin(), first4.end());
-        }
-    }
+    void sortFirst4WithSpan(std::span<int>);
 
     void sortFirst4InPlace() {
         std::vector<int> ints{1, 3, 6, 0, 8, 2, 3, 9};
         print("ints before: {}", ints);// print using std::format specialization
         sortFirst4WithSpan(ints);
         print("ints after: {}", ints);// print using std::format specialization
+    }
+
+    void sortFirst4WithSpan(std::span<int> int_collection) {
+        auto num_el = 4;
+        if (int_collection.size() >= num_el) {
+            auto first4 = int_collection.subspan(0, num_el);
+            std::sort(first4.begin(), first4.end());
+        }
     }
 
     void spanMisuse() {
