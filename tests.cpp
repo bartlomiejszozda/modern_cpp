@@ -19,11 +19,10 @@ TEST(Test, testSquareRoot) {
 }
 
 TEST(Test, testOptional) {
-    auto opt = use_optional::returnOptional();
+    auto opt = use_optional::drawAndreturnOptionalIfOdd();
+
     if (opt.has_value()) {
-        std::cout << std::format("{0} is optional", opt.value()) << std::endl;
-    } else {
-        std::cout << std::format("is not optional") << std::endl;
+        EXPECT_TRUE(opt.value() % 2 == 1);
     }
 }
 
@@ -37,9 +36,7 @@ TEST(Test, testMemoryLeak) {
 
 TEST(Test, testSortFirst4InPlace) {
     std::vector<int> ints{1, 3, 6, 0, 8, 2, 3, 9};
-    print("ints before: {}", ints);
     use_span::sortFirst4WithSpan(ints);
-    print("ints after: {}", ints);
     auto expected = std::vector<int>{0, 1, 3, 6, 8, 2, 3, 9};
     EXPECT_EQ(expected, ints);
 }
@@ -60,17 +57,19 @@ TEST(Test, testSpanMisuse) {
 
 TEST(Test, testPrintOwnTypeUsingFormatter) {
     EXPECT_NO_THROW({
-                        MyType mytype;
-                        print("mytype printed with the formatter: {}", mytype);
-                    });
+        MyType mytype;
+        print("mytype printed with the formatter: {}", mytype);
+    });
 }
 
 TEST(Test, testStringViewAcceptsStringAndCharPtr) {
-    const char *str = "const char ptr bla";
-    use_string_view::printStringView(str);
+    const char *char_str = "const char ptr bla";
+    std::string str{"string bla"};
 
-    std::string char_str{"string bla"};
-    use_string_view::printStringView(char_str);
+    use_string_view::printStringView(str);                              //ok lval string
+    use_string_view::printStringView(char_str);                         //ok lval char*
+    use_string_view::printStringView("const char rval");                // ok, static array
+    use_string_view::printStringView(std::string("const char ptr bla"));//also ok, temporary string will outlive printStringView
 }
 
 TEST(Test, testFilterEven) {
