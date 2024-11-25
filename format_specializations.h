@@ -11,21 +11,6 @@ void print(const std::string_view fmt_str, Args &&...args) {
     fputs(outstr.c_str(), stdout);
 }
 
-class MyType {
-};
-
-template<>
-struct std::formatter<MyType> {
-    constexpr auto parse(std::format_parse_context &ctx) {
-        return ctx.begin();// No additional parsing needed
-    }
-
-    // Format the vector
-    auto format(const MyType &my, std::format_context &ctx) const {
-        return std::format_to(ctx.out(), "my type");
-    }
-};
-
 template<>
 struct std::formatter<std::vector<int>> {
     template<typename ParseContext>

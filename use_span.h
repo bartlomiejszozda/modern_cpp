@@ -1,4 +1,5 @@
 #pragma once
+
 #include <algorithm>
 #include <iostream>
 #include <span>
@@ -7,16 +8,11 @@
 #include "format_specializations.h"
 
 namespace use_span {
-    void sortWithSpan(std::span<int> int_collection) {
-        std::sort(int_collection.begin(), int_collection.end());
-    }
-
-    void useSpan() {
-        std::vector<int> ints{1, 3, 6, 0, 8, 2, 3, 9};
-        MyType my;
-        print("my type format: {}", my);
-        print("ints before: {}", ints);
-        sortWithSpan(ints);
-        print("ints after: {}", ints);
+    void sortFirst4WithSpan(std::span<int> int_collection) {
+        auto num_el = 4;
+        if (int_collection.size() >= num_el) {
+            auto first4 = int_collection.subspan(0, num_el);
+            std::sort(first4.begin(), first4.end());
+        }
     }
 }// namespace use_span

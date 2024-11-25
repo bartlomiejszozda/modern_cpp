@@ -25,16 +25,20 @@ namespace use_shared {
         a->ptrB = std::shared_ptr<B>(b);// A's shared_ptr to B
         b->ptrA = std::shared_ptr<A>(a);// B's shared_ptr to A
 
-        delete a;// Manual deletion
-        delete b;// Manual deletion
+        delete a;// delete b also, because shared_ptr(b) counter = 1
+        delete b;// second b deletion
     }
 
     void memoryLeak() {
         auto a = std::make_shared<A>();
         auto b = std::make_shared<B>();
 
-        a->ptrB = std::shared_ptr<B>(b);// A's shared_ptr to B
-        b->ptrA = std::shared_ptr<A>(a);// B's shared_ptr to A
+        a->ptrB = std::shared_ptr<B>(b);
+        b->ptrA = std::shared_ptr<A>(a);
+
+        // call shared_ptr(a) destructor (not A destructor) and only shared_ptr(a) counter is decreased
+        // call shared_ptr(b) destructor (not B destructor) and only shared_ptr(b) counter is decreased
+        // finally shared_ptr(a) and shared_ptr(b) counters are 1. a and b aren't deleted
     }
 
 }// namespace use_shared
