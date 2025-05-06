@@ -3,7 +3,7 @@
 #include <string>
 
 namespace use_string_view {
-    void printStringView(std::string_view str) {
+    void acceptStringView([[maybe_unused]] std::string_view str) {
         // do nothing
     }
 

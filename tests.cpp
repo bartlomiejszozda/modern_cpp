@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "A.h"
 #include "MyType.h"
 #include "use_expected.h"
 #include "use_optional.h"
@@ -66,10 +67,10 @@ TEST(Test, testStringViewAcceptsStringAndCharPtr) {
     const char *char_str = "const char ptr bla";
     std::string str{"string bla"};
 
-    use_string_view::printStringView(str);                              //ok lval string
-    use_string_view::printStringView(char_str);                         //ok lval char*
-    use_string_view::printStringView("const char rval");                // ok, static array
-    use_string_view::printStringView(std::string("const char ptr bla"));//also ok, temporary string will outlive printStringView
+    use_string_view::acceptStringView(str);                              // ok lval string
+    use_string_view::acceptStringView(char_str);                         // ok lval char*
+    use_string_view::acceptStringView("const char rval");                // ok, static array
+    use_string_view::acceptStringView(std::string("const char ptr bla"));// also ok, temporary string will outlive printStringView
 }
 
 TEST(Test, testFilterEven) {
@@ -112,4 +113,18 @@ TEST(Test, testFlatNested) {
 TEST(Test, testGenerateFromIota) {
     std::vector<int> expected{100, 101, 102, 103, 104, 105, 106, 107, 108, 109};
     EXPECT_EQ(expected, use_ranges::generateFromIota());
+}
+
+TEST(Test, testConstLifetimeExtension) {
+    std::cout << "test constructors, destructors, operators, const lifetime extension \n";
+    A a = A{};
+    const A a2 = a;
+    A a3, a4, a5{a2};
+    a3 = a;
+    a4 = std::move(a);
+
+    auto a_lambda = []() { return A{}; };
+
+    // A& a5 = A{}; cannot bind to temporary A
+    const A &a6 = a_lambda();// const lifetime extension
 }
