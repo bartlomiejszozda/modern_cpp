@@ -115,6 +115,20 @@ TEST(Test, testGenerateFromIota) {
     EXPECT_EQ(expected, use_ranges::generateFromIota());
 }
 
+TEST(Test, testSortReverseDrop5) {
+    std::vector<int> input{2, 1, 4, 3, 5, 6, 7, 8, 9};
+    std::vector<int> expected{9, 8, 7, 6, 5};
+    EXPECT_EQ(expected, use_ranges::sortReverseDrop5(input));
+}
+
+TEST(Test, test) {
+    std::vector vec{1, 2, 3, 4, 5, 6};
+    std::vector result = vec | ranges::views::filter([](int el) { return el % 2; }) | ranges::views::transform([](auto el) { return el * el; }) | ranges::to<std::vector<int>>;
+    std::vector expected{1, 9, 25};
+    EXPECT_EQ(expected, result);
+}
+
+
 TEST(Test, testConstLifetimeExtension) {
     std::cout << "test constructors, destructors, operators, const lifetime extension \n";
     A a = A{};

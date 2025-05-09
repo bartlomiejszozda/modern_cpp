@@ -1,40 +1,13 @@
 #pragma once
 
+#include "format_specializations.h"
+#include <iostream>
+#include <range/v3/action.hpp>
+#include <range/v3/core.hpp>
+#include <range/v3/view.hpp>
+#include <ranges>
 #include <span>
 #include <string>
-#include <ranges>
-#include <iostream>
-#include "format_specializations.h"
-
-/*
-Task 3.5: Learn how to create own ranges pipe object and create filterEven and square functions in such way that they can be used in ranges pipe
-
-Need to use ranges-v3:
-        Task 8: Chaining Views with views::cycle
-        Goal: Repeat a short range cyclically to create a range of repeating values.
-        Details: Use views::cycle to repeat a range (e.g., {1, 2, 3}) multiple times. Limit the length with views::take.
-        Example: Input {1, 2, 3} with views::take(10) should output {1, 2, 3, 1, 2, 3, 1, 2, 3, 1}.
-
-        Task 9: Applying views::unique
-        Goal: Remove consecutive duplicate numbers in a sorted list.
-        Details: Use std::views::unique to remove consecutive duplicates.
-        Example: Input {1, 1, 2, 2, 2, 3, 3, 4} should output {1, 2, 3, 4}.
-
-        Task 10: Applying views::generate
-        Goal: Generate an infinite range of numbers based on a formula (e.g., 3 * n + 1).
-        Details: Use std::views::generate with a lambda that returns a formula-based sequence. Limit the length with views::take.
-        Example: Starting with 1, formula 3 * n + 1, take 5 numbers: {1, 4, 13, 40, 121}.
-
-        Task 11: Working with views::zip
-        Goal: Create a range of pairs by zipping two ranges together.
-        Details: Use views::zip to combine two ranges (e.g., {1, 2, 3} and {'a', 'b', 'c'}) into pairs.
-        Example: {1, 2, 3} and {'a', 'b', 'c'} should output {(1, 'a'), (2, 'b'), (3, 'c')}.
-
-        Task 12: Sliding Window with Custom View
-        Goal: Implement a sliding window view that groups elements into small, overlapping subranges.
-        Details: Write a custom view or use std::views::sliding (if available) to create sliding subranges over the data.
-        Example: For {1, 2, 3, 4, 5} with a window size of 3, the output should be { {1, 2, 3}, {2, 3, 4}, {3, 4, 5} }.
-*/
 
 namespace use_ranges {
     std::string most_frequent_word() {
@@ -108,6 +81,10 @@ namespace use_ranges {
     std::vector<int> generateFromIota() {
         auto generated = std::views::iota(100) | std::views::take(10);
         return toVector(generated);
+    }
+
+    std::vector<int> sortReverseDrop5(std::span<int> input) {
+        return input | ranges::views::all | ranges::views::drop(4) | ranges::actions::sort | ranges::views::reverse | ranges::to<std::vector>;
     }
 
 }// namespace use_ranges
