@@ -2,3 +2,19 @@ docker start modern_cpp_container
 docker exec -it modern_cpp_container bash
 docker stop modern_cpp_container
 docker rm modern_cpp_container
+
+#CONAN:
+# If conan is not accessible after runing new container:
+Enter docker shell, run `pipx ensurepath`, exit shell, enter shell again.
+
+conan profile:
+[settings]
+arch=x86_64
+build_type=Debug
+compiler=gcc
+compiler.cppstd=gnu23
+compiler.libcxx=libstdc++11
+compiler.version=13
+os=Linux
+
+conan install . --build=missing --output-folder=cmake-build-debug

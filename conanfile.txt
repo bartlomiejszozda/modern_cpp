@@ -1,0 +1,6 @@
+[requires]
+range-v3/[*]
+
+[generators]
+CMakeDeps
+CMakeToolchain

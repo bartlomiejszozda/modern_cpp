@@ -3,8 +3,6 @@ project(test_modern)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(main_modern main.cpp)
-
 #GTEST START
 include(FetchContent)
 FetchContent_Declare(
@@ -27,3 +25,6 @@ target_link_libraries(
 include(GoogleTest)
 gtest_discover_tests(test_modern)
 #GTEST END
+
+find_package(range-v3 REQUIRED)
+target_link_libraries(test_modern range-v3::range-v3)

@@ -15,13 +15,14 @@ RUN apt update -y && apt upgrade -y && apt install -y \
     libc++-dev \
     rsync \
     openssh-server \
-    gdb && \
-    valgrind && \
-    apt clean \
+    gdb \
+    valgrind \
+    pipx \
+    libgtest-dev \
+    && apt clean
 
-RUN apt install -y \
-    libgtest-dev && \
-    apt clean
+RUN pipx ensurepath
+RUN pipx install conan
 
 #ssh for remote development
 RUN mkdir /var/run/sshd && \
@@ -43,4 +44,3 @@ RUN wget https://github.com/ccache/ccache/releases/download/v$VERSION/$CCACHE_TA
     make install -j`nproc` && \
     cd ../../ && \
     rm -r $CCACHE_SRC
-
