@@ -5,11 +5,12 @@
 #include "use_expected.h"
 #include "use_optional.h"
 #include "use_ranges.h"
+#include "use_ranges_v3.h"
 #include "use_shared.h"
 #include "use_span.h"
 #include "use_string_view.h"
 
-TEST(Test, testSquareRoot) {
+TEST(testExpected, testSquareRoot) {
     auto exp = use_expected::calcSquareRoot(-1);
     EXPECT_FALSE(exp.has_value());
     EXPECT_EQ("a is less than 0", exp.error());
@@ -19,7 +20,7 @@ TEST(Test, testSquareRoot) {
     EXPECT_NEAR(2.23, exp2.value(), 0.01);
 }
 
-TEST(Test, testOptional) {
+TEST(TestOptional, testOptional) {
     auto opt = use_optional::drawAndreturnOptionalIfOdd();
 
     if (opt.has_value()) {
@@ -27,22 +28,22 @@ TEST(Test, testOptional) {
     }
 }
 
-TEST(Test, testDoubleFree) {
+TEST(TestSharedPtrs, testDoubleFree) {
     // use_shared::doubleFree();
 }
 
-TEST(Test, testMemoryLeak) {
+TEST(TestSharedPtrs, testMemoryLeak) {
     // use_shared::memoryLeak();
 }
 
-TEST(Test, testSortFirst4InPlace) {
+TEST(TestSpan, testSortFirst4InPlace) {
     std::vector<int> ints{1, 3, 6, 0, 8, 2, 3, 9};
     use_span::sortFirst4WithSpan(ints);
     auto expected = std::vector<int>{0, 1, 3, 6, 8, 2, 3, 9};
     EXPECT_EQ(expected, ints);
 }
 
-TEST(Test, testSpanMisuse) {
+TEST(TestSpan, testSpanMisuse) {
     //auto retVec = []() { return std::vector<int>{1, 2, 3}; };
     //std::span<const int> s = retVec();
 
@@ -56,14 +57,14 @@ TEST(Test, testSpanMisuse) {
     // VERY SHORTLY: use std::string_view and std::span only as parameter types. https://quuxplusone.github.io/blog/2018/03/27/string-view-is-a-borrow-type/
 }
 
-TEST(Test, testPrintOwnTypeUsingFormatter) {
+TEST(TestFormatter, testPrintOwnTypeUsingFormatter) {
     EXPECT_NO_THROW({
         MyType mytype;
         print("mytype printed with the formatter: {}", mytype);
     });
 }
 
-TEST(Test, testStringViewAcceptsStringAndCharPtr) {
+TEST(TestStringView, testStringViewAcceptsStringAndCharPtr) {
     const char *char_str = "const char ptr bla";
     std::string str{"string bla"};
 
@@ -73,63 +74,7 @@ TEST(Test, testStringViewAcceptsStringAndCharPtr) {
     use_string_view::acceptStringView(std::string("const char ptr bla"));// also ok, temporary string will outlive printStringView
 }
 
-TEST(Test, testFilterEven) {
-    std::vector<int> example{-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
-    std::vector<int> expected{-6, -4, -2, 0, 2, 4, 6};
-    EXPECT_EQ(expected, use_ranges::filterEven(example));
-}
-
-TEST(Test, testSquare) {
-    std::vector<int> example{-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
-    std::vector<int> expected{36, 25, 16, 9, 4, 1, 0, 1, 4, 9, 16, 25, 36};
-    EXPECT_EQ(expected, use_ranges::square(example));
-}
-
-TEST(Test, testReverse) {
-    std::vector<int> example{-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
-    std::vector<int> expected{6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5, -6};
-    EXPECT_EQ(expected, use_ranges::reverse(example));
-}
-
-TEST(Test, testSquareOddTake2) {
-    std::vector<int> example{-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
-    std::vector<int> expected{1, 9};
-    EXPECT_EQ(expected, use_ranges::squareOddTake2(example));
-}
-
-TEST(Test, testDrop2) {
-    std::vector<int> example{-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
-    std::vector<int> expected{-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
-    EXPECT_EQ(expected, use_ranges::drop2(example));
-}
-
-TEST(Test, testFlatNested) {
-    std::vector<int> expected{1, 2, 3, 4, 5, 6};
-    EXPECT_EQ(expected, use_ranges::flatNested({{1, 2},
-                                                {3, 4},
-                                                {5, 6}}));
-}
-
-TEST(Test, testGenerateFromIota) {
-    std::vector<int> expected{100, 101, 102, 103, 104, 105, 106, 107, 108, 109};
-    EXPECT_EQ(expected, use_ranges::generateFromIota());
-}
-
-TEST(Test, testSortReverseDrop5) {
-    std::vector<int> input{2, 1, 4, 3, 5, 6, 7, 8, 9};
-    std::vector<int> expected{9, 8, 7, 6, 5};
-    EXPECT_EQ(expected, use_ranges::sortReverseDrop5(input));
-}
-
-TEST(Test, test) {
-    std::vector vec{1, 2, 3, 4, 5, 6};
-    std::vector result = vec | ranges::views::filter([](int el) { return el % 2; }) | ranges::views::transform([](auto el) { return el * el; }) | ranges::to<std::vector<int>>;
-    std::vector expected{1, 9, 25};
-    EXPECT_EQ(expected, result);
-}
-
-
-TEST(Test, testConstLifetimeExtension) {
+TEST(TestConstructDestruct, testConstructDestruct) {
     std::cout << "test constructors, destructors, operators, const lifetime extension \n";
     A a = A{};
     const A a2 = a;
@@ -141,4 +86,91 @@ TEST(Test, testConstLifetimeExtension) {
 
     // A& a5 = A{}; cannot bind to temporary A
     const A &a6 = a_lambda();// const lifetime extension
+}
+
+TEST(TestStdRanges, testFilterEven) {
+    std::vector<int> example{-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
+    std::vector<int> expected{-6, -4, -2, 0, 2, 4, 6};
+    EXPECT_EQ(expected, use_ranges::filterEven(example));
+}
+
+TEST(TestStdRanges, testSquare) {
+    std::vector<int> example{-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
+    std::vector<int> expected{36, 25, 16, 9, 4, 1, 0, 1, 4, 9, 16, 25, 36};
+    EXPECT_EQ(expected, use_ranges::square(example));
+}
+
+TEST(TestStdRanges, testReverse) {
+    std::vector<int> example{-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
+    std::vector<int> expected{6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5, -6};
+    EXPECT_EQ(expected, use_ranges::reverse(example));
+}
+
+TEST(TestStdRanges, testSquareOddTake2) {
+    std::vector<int> example{-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
+    std::vector<int> expected{1, 9};
+    EXPECT_EQ(expected, use_ranges::squareOddTake2(example));
+}
+
+TEST(TestStdRanges, testDrop2) {
+    std::vector<int> example{-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
+    std::vector<int> expected{-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
+    EXPECT_EQ(expected, use_ranges::drop2(example));
+}
+
+TEST(TestStdRanges, testFlatNested) {
+    std::vector<int> expected{1, 2, 3, 4, 5, 6};
+    EXPECT_EQ(expected, use_ranges::flatNested({{1, 2},
+                                                {3, 4},
+                                                {5, 6}}));
+}
+
+TEST(TestStdRanges, testGenerateFromIota) {
+    std::vector<int> expected{100, 101, 102, 103, 104, 105, 106, 107, 108, 109};
+    EXPECT_EQ(expected, use_ranges::generateFromIota());
+}
+
+TEST(TestRangesV3, testSortReverseDrop5) {
+    std::vector<int> input{2, 1, 4, 3, 5, 6, 7, 8, 9};
+    std::vector<int> expected{9, 8, 7, 6, 5};
+    auto result = use_ranges_v3::sortReverseDrop5(input);
+    EXPECT_EQ(expected, result | ranges::to<std::vector<int>>);
+    // Or compare one by one thanks to zip
+    for (auto &&[exp, res]: ranges::views::zip(expected, result)) {
+        EXPECT_EQ(exp, res);
+    }
+}
+
+TEST(TestRangesV3, oddSquared) {
+    using namespace ranges;
+    std::vector vec{1, 2, 3, 4, 5, 6};
+    auto result = vec | views::filter([](int el) { return el % 2; }) | views::transform([](auto el) { return el * el; });
+    std::vector expected{1, 9, 25};
+    EXPECT_EQ(expected, result | to<std::vector<int>>);
+}
+TEST(TestRangesV3, sumOfReciprocals) {
+    std::vector<double> data = {2.0, 4.0, 8.0};
+    EXPECT_EQ(0.875, use_ranges_v3::sumOfReciprocals1(data));
+    EXPECT_EQ(0.875, use_ranges_v3::sumOfReciprocals2(data));
+    data = {2.0, 4.0, 8.0};
+    EXPECT_EQ(0.875, use_ranges_v3::sumOfReciprocals3(data));
+    EXPECT_EQ(0.875, use_ranges_v3::sumOfReciprocals4(data));
+}
+
+TEST(TestRangesV3, binaryToDecimal) {
+    std::vector<int> binary{1, 0, 1, 1, 0};
+    auto expected = 22;
+    EXPECT_EQ(expected, use_ranges_v3::binaryToDecimal(binary));
+}
+
+TEST(TestRangesV3, everyIntegerOnce) {
+    std::vector<int> expected = {1, 2, 3, 4, 5, 6, 8, 9, 23, 53, 123};
+    std::vector<int> input{1, 2, 3, 4, 5, 1, 2, 3, 6, 8, 9, 123, 53, 23};
+    EXPECT_EQ(expected, use_ranges_v3::everyIntegerOnce(input));
+}
+
+TEST(TestRangesV3, splitByOne) {
+    std::vector<int> input{1, 2, 3, 1, 4, 5, 1, 6, 7, 1, 8, 9};
+    std::vector<std::vector<int>> expected{{}, {2, 3}, {4, 5}, {6, 7}, {8, 9}};
+    EXPECT_EQ(expected, use_ranges_v3::toSplitByOne(input));
 }

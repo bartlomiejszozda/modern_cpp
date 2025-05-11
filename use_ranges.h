@@ -2,9 +2,6 @@
 
 #include "format_specializations.h"
 #include <iostream>
-#include <range/v3/action.hpp>
-#include <range/v3/core.hpp>
-#include <range/v3/view.hpp>
 #include <ranges>
 #include <span>
 #include <string>
@@ -37,7 +34,7 @@ namespace use_ranges {
         // split by spaces
         // prepare a list (or better a map) with word count
         // return N most frequent words
-        return "dupa";
+        return "";
     }
 
     std::vector<int> toVector(auto range) {
@@ -82,9 +79,4 @@ namespace use_ranges {
         auto generated = std::views::iota(100) | std::views::take(10);
         return toVector(generated);
     }
-
-    std::vector<int> sortReverseDrop5(std::span<int> input) {
-        return input | ranges::views::all | ranges::views::drop(4) | ranges::actions::sort | ranges::views::reverse | ranges::to<std::vector>;
-    }
-
 }// namespace use_ranges
