@@ -1,8 +1,30 @@
 #pragma once
 
 #include "format_specializations.h"
+#include <iostream>
+#include <memory>
 
-class MyType {
+class MyBaseType {
+public:
+    virtual void overriden(int a) = 0;
+};
+
+class MyType : public MyBaseType {
+public:
+    MyType(std::shared_ptr<int> val) {
+        value = val;
+    }
+
+    void overriden(int a) override {
+        if (*value == a) {
+            std::cout << "equal" << std::endl;
+        } else {
+            std::cout << "not equal" << std::endl;
+        }
+    };
+
+private:
+    std::shared_ptr<int> value;
 };
 
 template<>
@@ -11,7 +33,6 @@ struct std::formatter<MyType> {
         return ctx.begin();// No additional parsing needed
     }
 
-    // Format the vector
     auto format(const MyType &my, std::format_context &ctx) const {
         return std::format_to(ctx.out(), "my type from formatter");
     }
