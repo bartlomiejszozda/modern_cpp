@@ -2,6 +2,7 @@
 
 #include "A.h"
 #include "MyType.h"
+#include "use_concepts.h"
 #include "use_expected.h"
 #include "use_optional.h"
 #include "use_ranges.h"
@@ -173,4 +174,36 @@ TEST(TestRangesV3, splitByOne) {
     std::vector<int> input{1, 2, 3, 1, 4, 5, 1, 6, 7, 1, 8, 9};
     std::vector<std::vector<int>> expected{{}, {2, 3}, {4, 5}, {6, 7}, {8, 9}};
     EXPECT_EQ(expected, use_ranges_v3::toSplitByOne(input));
+}
+
+TEST(Concepts, add_integers) {
+    using namespace use_concepts;
+    add_integers(1, 2);
+    add_integers2(1, 2);
+    add_integers_shorter(1, 2);
+    add_integers_auto(1, 2);
+    // wont compile add_integers(1, 2.0);
+}
+
+TEST(Concepts, average) {
+    using namespace use_concepts;
+    std::vector<int> ints{1, 2, 3, 4, 5, 6, 7};
+    EXPECT_EQ(4.0, average(ints));
+    std::vector<float> floats{0.5, 1.5};
+    EXPECT_EQ(1.0, average(floats));
+    std::vector<double> doubles{0.5, 1.5};
+    EXPECT_EQ(1.0, average(doubles));
+    std::vector<char> chars{'a', 'b', 'c'};
+    EXPECT_EQ('b', average(chars));
+    // average(std::vector<MyType>{MyType{}, MyType{}}); // doesnt satisfy concept
+}
+
+TEST(Concepts, own_requires) {
+    using namespace use_concepts;
+    print_type(MyType{});
+    //    print_type(MyType2{});
+    static_assert(has_a_member_of_type_int<MyType2>);
+    static_assert(!has_a_member_of_type_int<MyType>);
+    move_and_make_sound(Animal{});
+    //    move_and_make_sound(NonAnimal{});
 }
