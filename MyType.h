@@ -1,21 +1,24 @@
 #pragma once
 
+#include "Rule5Class.h"
 #include "format_specializations.h"
+#include "use_shared.h"
 #include <iostream>
 #include <memory>
 
 class MyBaseType {
 public:
-    virtual void overriden(int a) = 0;
+    virtual void compare_polymorphicaly(Rule5Class a) = 0;
+    virtual ~MyBaseType() = default;
 };
 
 class MyType : public MyBaseType {
 public:
-    MyType(std::shared_ptr<int> val) {
+    explicit MyType(const std::shared_ptr<Rule5Class> &val) {
         value = val;
     }
 
-    void overriden(int a) override {
+    void compare_polymorphicaly(Rule5Class a) override {
         if (*value == a) {
             std::cout << "equal" << std::endl;
         } else {
@@ -24,7 +27,16 @@ public:
     };
 
 private:
-    std::shared_ptr<int> value;
+    std::shared_ptr<Rule5Class> value;
+};
+
+class MyTypeWithMutable {
+public:
+    void const_method() const {
+        this->mutable_member = "changed by const method";
+    }
+
+    mutable std::string mutable_member = "original";
 };
 
 template<>

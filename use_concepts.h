@@ -55,6 +55,7 @@ namespace use_concepts {
     };
 
     class Animal {
+    public:
         void move() {};
         void make_sound() {};
     };

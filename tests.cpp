@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "A.h"
 #include "MyType.h"
+#include "Rule5Class.h"
 #include "use_concepts.h"
 #include "use_expected.h"
 #include "use_optional.h"
@@ -60,7 +60,7 @@ TEST(TestSpan, testSpanMisuse) {
 
 TEST(TestFormatter, testPrintOwnTypeUsingFormatter) {
     EXPECT_NO_THROW({
-        MyType mytype;
+        MyType mytype{std::make_shared<Rule5Class>()};
         print("mytype printed with the formatter: {}", mytype);
     });
 }
@@ -77,16 +77,16 @@ TEST(TestStringView, testStringViewAcceptsStringAndCharPtr) {
 
 TEST(TestConstructDestruct, testConstructDestruct) {
     std::cout << "test constructors, destructors, operators, const lifetime extension \n";
-    A a = A{};
-    const A a2 = a;
-    A a3, a4, a5{a2};
+    Rule5Class a = Rule5Class{};
+    const Rule5Class a2 = a;
+    Rule5Class a3, a4, a5{a2};
     a3 = a;
     a4 = std::move(a);
 
-    auto a_lambda = []() { return A{}; };
+    auto a_lambda = []() { return Rule5Class{}; };
 
     // A& a5 = A{}; cannot bind to temporary A
-    const A &a6 = a_lambda();// const lifetime extension
+    const Rule5Class &a6 = a_lambda();// const lifetime extension
 }
 
 TEST(TestStdRanges, testFilterEven) {
@@ -200,7 +200,7 @@ TEST(Concepts, average) {
 
 TEST(Concepts, own_requires) {
     using namespace use_concepts;
-    print_type(MyType{});
+    print_type(MyType{std::make_shared<Rule5Class>()});
     //    print_type(MyType2{});
     static_assert(has_a_member_of_type_int<MyType2>);
     static_assert(!has_a_member_of_type_int<MyType>);
