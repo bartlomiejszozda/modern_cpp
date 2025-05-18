@@ -2,6 +2,7 @@
 
 #include "MyType.h"
 #include "Rule5Class.h"
+#include "Wrapper.h"
 #include "use_concepts.h"
 #include "use_expected.h"
 #include "use_optional.h"
@@ -76,17 +77,48 @@ TEST(TestStringView, testStringViewAcceptsStringAndCharPtr) {
 }
 
 TEST(TestConstructDestruct, testConstructDestruct) {
-    std::cout << "test constructors, destructors, operators, const lifetime extension \n";
-    Rule5Class a = Rule5Class{};
-    const Rule5Class a2 = a;
-    Rule5Class a3, a4, a5{a2};
-    a3 = a;
-    a4 = std::move(a);
+    std::cout << "-----Test constructors, destructors, operators, const lifetime extension \n";
+    {
+        Rule5Class a = Rule5Class{};
+        const Rule5Class a2 = a;
+        Rule5Class a3, a4, a5{a2};
+        a3 = a;
+        a4 = std::move(a);
 
-    auto a_lambda = []() { return Rule5Class{}; };
+        auto a_lambda = []() { return Rule5Class{}; };
 
-    // A& a5 = A{}; cannot bind to temporary A
-    const Rule5Class &a6 = a_lambda();// const lifetime extension
+        // auto& cannot_bind_to_temporary = Rule5Class{}; cannot bind to temporary A
+        const Rule5Class &const_lifetime_extension = a_lambda();// const lifetime extension
+        auto &&not_extended_lifetime = Rule5Class{};
+        // using not_extended_lifetime is UB because && doesn't extend lifetime of temporary
+    }
+    std::cout << "-----" << std::endl;
+}
+
+TEST(TestPerfectForwardingConstructDestruct, testPerfectForwardingConstructDestruct) {
+    std::cout << "-----Perfect forwarding construct/destruct" << std::endl;
+
+    {
+        std::cout << "perfect forwarding by &&" << std::endl;
+        Rule5Class obj;
+        Wrapper<Rule5Class> wrapper(std::move(obj));
+    }
+    {
+        std::cout << "perfect forwarding by value" << std::endl;
+        Rule5Class obj;
+        Wrapper<Rule5Class> wrapper(obj);
+    }
+    {
+        std::cout << "perfect forwarding by const value" << std::endl;
+        const Rule5Class obj;
+        Wrapper<const Rule5Class> wrapper(obj);
+    }
+    {
+        std::cout << "perfect forwarding by const value to const ref" << std::endl;
+        const Rule5Class obj;
+        Wrapper<const Rule5Class &> wrapper(obj);
+    }
+    std::cout << "-----" << std::endl;
 }
 
 TEST(TestStdRanges, testFilterEven) {
