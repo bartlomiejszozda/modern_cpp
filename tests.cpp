@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "DerivedClass.h"
 #include "MyType.h"
 #include "Rule5Class.h"
 #include "Wrapper.h"
@@ -119,6 +120,10 @@ TEST(TestPerfectForwardingConstructDestruct, testPerfectForwardingConstructDestr
         Wrapper<const Rule5Class &> wrapper(obj);
     }
     std::cout << "-----" << std::endl;
+}
+
+TEST(TestVirtualMethodFromConstructor, testVirtualMethodFromConstructor) {
+    call_virtual_from_constructor::DerivedClass{};
 }
 
 TEST(TestStdRanges, testFilterEven) {
